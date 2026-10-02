@@ -1,0 +1,53 @@
+# =========================
+# Dependencies
+# =========================
+node_modules/
+
+# =========================
+# Environment files
+# =========================
+.env
+.env.*
+!.env.example
+
+# =========================
+# VS Code
+# =========================
+.vscode/
+
+# =========================
+# OS files
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# Logs
+# =========================
+*.log
+
+# =========================
+# Firebase private credentials
+# =========================
+serviceAccountKey.json
+firebase-adminsdk-*.json
+*-service-account.json
+
+# =========================
+# Private keys
+# =========================
+*.pem
+*.key
+*.p12
+
+# =========================
+# Secrets / credentials
+# =========================
+secrets/
+credentials/
+
+# =========================
+# Local configuration
+# =========================
+config.local.js
+firebase-config.local.js

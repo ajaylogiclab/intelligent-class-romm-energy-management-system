@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Intelligent Classroom Energy Management</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-icon">⚡</div>
+      <div>
+        <h2>SmartClass</h2>
+        <span>Energy Management</span>
+      </div>
+    </div>
+
+    <nav>
+      <button class="nav-item active" data-page="overview">⌂ <span>Overview</span></button>
+      <button class="nav-item" data-page="energy">▥ <span>Energy Analytics</span></button>
+      <button class="nav-item" data-page="control">◉ <span>Appliance Control</span></button>
+      <button class="nav-item" data-page="automation">⚙ <span>Automation</span></button>
+    </nav>
+
+    <div class="connection-card">
+      <span class="dot"></span>
+      <div>
+        <strong>ESP32 Online</strong>
+        <small>Last update: <span id="lastUpdate">--</span></small>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div>
+        <h1>Intelligent Classroom Energy Management</h1>
+        <p>ECE Classroom • Real-time monitoring and control</p>
+      </div>
+      <div class="header-right">
+        <span id="clock">--:--:--</span>
+        <span class="status-badge online">● ONLINE</span>
+      </div>
+    </header>
+
+    <section id="overview" class="page active">
+      <div class="cards">
+        <div class="metric-card">
+          <div class="metric-title">Occupancy</div>
+          <div class="metric-value" id="occupancy">OCCUPIED</div>
+          <div class="metric-sub" id="people">Motion detected</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-title">Temperature</div>
+          <div class="metric-value"><span id="temperature">27.4</span> °C</div>
+          <div class="metric-sub">DHT22 Sensor</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-title">Humidity</div>
+          <div class="metric-value"><span id="humidity">61</span> %</div>
+          <div class="metric-sub">DHT22 Sensor</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-title">Energy Today</div>
+          <div class="metric-value"><span id="energyToday">4.82</span> kWh</div>
+          <div class="metric-sub">Estimated cost: ₹<span id="cost">38.56</span></div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="panel">
+          <div class="panel-header">
+            <h2>Appliance Status</h2>
+            <span class="auto-label">AUTO</span>
+          </div>
+          <div class="appliance-list">
+            <div class="appliance"><span>💡 Light</span><strong id="lightStatus" class="on">ON</strong></div>
+            <div class="appliance"><span>🌀 Fan</span><strong id="fanStatus" class="on">ON</strong></div>
+            <div class="appliance"><span>❄ AC</span><strong id="acStatus" class="off">OFF</strong></div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <h2>Classroom Status</h2>
+            <span class="live">LIVE</span>
+          </div>
+          <div class="status-row"><span>Occupancy</span><strong id="occupancy2">Occupied</strong></div>
+          <div class="status-row"><span>Temperature</span><strong><span id="temp2">27.4</span> °C</strong></div>
+          <div class="status-row"><span>Humidity</span><strong><span id="hum2">61</span> %</strong></div>
+          <div class="status-row"><span>Current Power</span><strong><span id="power">420</span> W</strong></div>
+        </div>
+      </div>
+
+      <div class="panel chart-panel">
+        <div class="panel-header">
+          <h2>Today's Energy Consumption</h2>
+          <span>kWh</span>
+        </div>
+        <canvas id="energyChart"></canvas>
+      </div>
+    </section>
+
+    <section id="energy" class="page">
+      <h2 class="page-title">Energy Analytics</h2>
+      <div class="cards">
+        <div class="metric-card"><div class="metric-title">Today's Energy</div><div class="metric-value">4.82 kWh</div></div>
+        <div class="metric-card"><div class="metric-title">Peak Power</div><div class="metric-value">1.42 kW</div></div>
+        <div class="metric-card"><div class="metric-title">Estimated Cost</div><div class="metric-value">₹38.56</div></div>
+        <div class="metric-card"><div class="metric-title">Energy Saved</div><div class="metric-value">1.27 kWh</div></div>
+      </div>
+      <div class="panel chart-panel large"><canvas id="analyticsChart"></canvas></div>
+    </section>
+
+    <section id="control" class="page">
+      <h2 class="page-title">Appliance Control</h2>
+      <div class="control-grid">
+        <div class="control-card"><div class="control-icon">💡</div><h3>Light</h3><p id="lightText">Currently ON</p><button onclick="toggleAppliance('light')" id="lightBtn">TURN OFF</button></div>
+        <div class="control-card"><div class="control-icon">🌀</div><h3>Fan</h3><p id="fanText">Currently ON</p><button onclick="toggleAppliance('fan')" id="fanBtn">TURN OFF</button></div>
+        <div class="control-card"><div class="control-icon">❄</div><h3>Air Conditioner</h3><p id="acText">Currently OFF</p><button onclick="toggleAppliance('ac')" id="acBtn">TURN ON</button></div>
+      </div>
+    </section>
+
+    <section id="automation" class="page">
+      <h2 class="page-title">Automation Settings</h2>
+      <div class="panel settings">
+        <div class="setting">
+          <div><h3>Occupancy Control</h3><p>Automatically control appliances based on classroom occupancy.</p></div>
+          <label class="switch"><input type="checkbox" checked><span></span></label>
+        </div>
+        <div class="setting">
+          <div><h3>No-Occupancy Timeout</h3><p>Turn appliances OFF after no motion is detected.</p></div>
+          <select><option>5 minutes</option><option>10 minutes</option><option>15 minutes</option></select>
+        </div>
+        <div class="setting">
+          <div><h3>Temperature Control</h3><p>Use temperature data to control the fan/AC.</p></div>
+          <label class="switch"><input type="checkbox" checked><span></span></label>
+        </div>
+        <div class="setting">
+          <div><h3>Temperature Threshold</h3><p>Fan/AC control threshold.</p></div>
+          <select><option>26 °C</option><option selected>28 °C</option><option>30 °C</option></select>
+        </div>
+      </div>
+    </section>
+  </main>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script type="module" src="script.js"></script>
+</body>
+</html>
